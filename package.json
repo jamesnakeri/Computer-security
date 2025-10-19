@@ -12,9 +12,13 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^2.2.0",
+<<<<<<< HEAD
     "csv-parser": "^3.2.0",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "nodemailer": "^7.0.9"
+=======
+    "express": "^5.1.0"
+>>>>>>> 7ab8f20c853fb23bb571c5099af8c01f761556d6
   }
 }
